@@ -1,0 +1,1 @@
+async function api(u,m='GET',d=null,a=false){const o={method:m,headers:{'Content-Type':'application/json'}};if(d)o.body=JSON.stringify(d);if(a){const t=localStorage.getItem('token');if(t)o.headers.Authorization='Bearer '+t;}const r=await fetch(u,o);return await r.json();}
