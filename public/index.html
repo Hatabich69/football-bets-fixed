@@ -1,27 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <title>Football Bets — Головна</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Football Bets | Головна</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<header>
-  <h1>Football Bets</h1>
-  <nav>
-    <a href="/index.html">Головна</a>
-    <a href="/register.html">Реєстрація</a>
-    <a href="/login.html">Вхід</a>
-    <a href="/dashboard.html">Кабінет</a>
-    <a href="/admin.html">Адмін</a>
-  </nav>
-</header>
-<main>
-  <h2>Найближчі матчі</h2>
-  <div id="matches"></div>
-</main>
-<script src="/main.js"></script>
-<script>loadMatches('matches', false);</script>
+  <header>
+    <h1>⚽ Football Bets</h1>
+    <nav>
+      <a href="index.html">Головна</a>
+      <a href="dashboard.html">Мої ставки</a>
+      <a href="login.html">Увійти</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Система футбольних ставок</h2>
+      <p>
+        Демонстраційна система для показу принципів роботи інформаційних систем
+        у сфері спорту. Реалізовано студентом <b>Ярославом Струком</b> у рамках
+        курсового проєкту 2025 року.
+      </p>
+      <button onclick="location.href='register.html'">Розпочати зараз</button>
+    </section>
+
+    <section class="matches">
+      <h3>Актуальні матчі</h3>
+      <div class="match-card">
+        <span>Real Madrid vs Barcelona</span>
+        <span>Коеф: 2.35</span>
+        <button>Зробити ставку</button>
+      </div>
+      <div class="match-card">
+        <span>Manchester City vs Liverpool</span>
+        <span>Коеф: 1.95</span>
+        <button>Зробити ставку</button>
+      </div>
+      <div class="match-card">
+        <span>PSG vs Bayern Munich</span>
+        <span>Коеф: 2.60</span>
+        <button>Зробити ставку</button>
+      </div>
+    </section>
+
+    <section class="how">
+      <h3>Як це працює?</h3>
+      <ol>
+        <li>Зареєструйся або увійди в систему</li>
+        <li>Обери футбольний матч</li>
+        <li>Зроби ставку та перевір результат</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>© 2025 Football Bets | Created by Yaroslav Struk</footer>
 </body>
 </html>

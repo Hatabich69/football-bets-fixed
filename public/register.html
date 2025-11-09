@@ -1,44 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Реєстрація — Football Bets</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<header>
-  <h1>Football Bets</h1>
-  <nav>
-    <a href="/index.html">Головна</a>
-    <a href="/login.html">Вхід</a>
-  </nav>
-</header>
-
-<main>
-  <div class="card">
-    <h2>Реєстрація</h2>
-    <form id="regForm">
-      <input name="username" placeholder="Логін" required><br>
-      <input name="email" type="email" placeholder="Email" required><br>
-      <input name="password" type="password" placeholder="Пароль" required><br>
-      <button>Зареєструватися</button>
-    </form>
-    <div id="msg" class="small"></div>
-  </div>
-</main>
-
-<script src="/main.js"></script>
-<script>
-  const form = document.getElementById('regForm');
-  const msg = document.getElementById('msg');
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
-    const res = await api('/api/auth/register', 'POST', data);
-    msg.textContent = res.error ? res.error : 'Реєстрація успішна! Тепер увійдіть.';
-    if (!res.error) setTimeout(() => window.location = '/login.html', 1000);
-  });
-</script>
+  <header><h1>Football Bets</h1></header>
+  <main class="container">
+    <div class="form-box">
+      <h2>Реєстрація</h2>
+      <form>
+        <input type="text" placeholder="Ім’я користувача" required />
+        <input type="email" placeholder="E-mail" required />
+        <input type="password" placeholder="Пароль" required />
+        <button>Зареєструватися</button>
+      </form>
+      <p>Вже маєш акаунт? <a href="login.html">Увійди</a></p>
+    </div>
+  </main>
 </body>
 </html>
