@@ -1,1 +1,119 @@
-<!doctype html><html lang='uk'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Адмін</title><link rel='stylesheet' href='/styles.css'></head><body><header><h1>Адмін</h1></header><main><div id='msg'></div></main><script src='/main.js'></script></body></html>
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>Адмін панель — Football Bets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <h1>Football Bets — Адмін панель</h1>
+  <nav>
+    <a href="/dashboard.html">Кабінет</a>
+    <a href="javascript:void(0)" onclick="logout()">Вийти</a>
+  </nav>
+</header>
+
+<main>
+  <div id="info"></div>
+
+  <div class="card">
+    <h3>Додати матч</h3>
+    <form id="matchForm">
+      <input name="home_team" placeholder="Домашня команда" required>
+      <input name="away_team" placeholder="Гостьова команда" required><br>
+      <input name="kickoff_at" type="datetime-local" required>
+      <button>Додати</button>
+    </form>
+    <div id="matchMsg" class="small"></div>
+  </div>
+
+  <div class="card">
+    <h3>Матчі</h3>
+    <div id="matches"></div>
+  </div>
+
+  <div class="card">
+    <h3>Ставки користувачів</h3>
+    <div id="bets"></div>
+  </div>
+</main>
+
+<script src="/main.js"></script>
+<script>
+requireAuthOrRedirect();
+
+async function loadAdminData() {
+  const info = document.getElementById('info');
+  info.textContent = 'Завантаження...';
+  const users = await api('/api/admin/users', 'GET', null, true);
+  info.innerHTML = `<b>Адмін:</b> ${users.length} користувачів`;
+}
+
+const matchForm = document.getElementById('matchForm');
+matchForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(matchForm).entries());
+  const res = await api('/api/matches', 'POST', data, true);
+  document.getElementById('matchMsg').textContent = res.error ? res.error : 'Матч додано!';
+  if (!res.error) loadMatchesAdmin();
+});
+
+async function loadMatchesAdmin() {
+  const container = document.getElementById('matches');
+  const matches = await api('/api/matches');
+  container.innerHTML = '';
+  for (const m of matches) {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <b>${m.home_team}</b> vs <b>${m.away_team}</b>
+      <div class="small">${m.kickoff_at} — ${m.status}</div>
+      <button data-id="${m.id}">Додати коеф.</button>
+    `;
+    div.querySelector('button').addEventListener('click', () => addOdds(m.id));
+    container.appendChild(div);
+  }
+}
+
+async function addOdds(id) {
+  const market = prompt('Ринок (наприклад 1x2)');
+  const selection = prompt('Вибір (Home, Draw, Away)');
+  const price = prompt('Коефіцієнт');
+  if (!market || !selection || !price) return;
+  const res = await api(`/api/matches/${id}/odds`, 'POST', { market, selection, price }, true);
+  alert(res.error ? res.error : 'Коефіцієнт додано');
+}
+
+async function loadBetsAdmin() {
+  const container = document.getElementById('bets');
+  const bets = await api('/api/admin/bets', 'GET', null, true);
+  container.innerHTML = '';
+  bets.forEach(b => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <b>${b.username}</b> — ${b.home_team} vs ${b.away_team}
+      <div class="small">Вибір: ${b.selection}, Сума: ${b.stake}, Кф: ${b.price}, Статус: ${b.status}</div>
+      ${b.status === 'open'
+        ? `<button onclick="settle(${b.id}, 'win')">Win</button>
+           <button onclick="settle(${b.id}, 'lose')">Lose</button>`
+        : ''}
+    `;
+    container.appendChild(div);
+  });
+}
+
+async function settle(id, resType) {
+  const res = await api(`/api/admin/bets/${id}/settle`, 'POST', { result: resType }, true);
+  alert(res.error ? res.error : 'Ставку розраховано!');
+  loadBetsAdmin();
+}
+
+loadAdminData();
+loadMatchesAdmin();
+loadBetsAdmin();
+</script>
+</body>
+</html>

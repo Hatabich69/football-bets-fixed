@@ -1,1 +1,42 @@
-<!doctype html><html lang='uk'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'><title>Кабінет</title><link rel='stylesheet' href='/styles.css'></head><body><header><h1>Мій кабінет</h1></header><main><div id='matches'></div><h2>Мої ставки</h2><div id='bets'></div></main><script src='/main.js'></script></body></html>
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>Мій кабінет</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <h1>Football Bets — Кабінет</h1>
+  <nav>
+    <a href="/index.html">Головна</a>
+    <a href="/dashboard.html">Кабінет</a>
+    <a href="javascript:void(0)" onclick="logout()">Вийти</a>
+  </nav>
+</header>
+<main>
+  <div id="profile"></div>
+
+  <div class="card">
+    <h3>Поповнення балансу (демо)</h3>
+    <input id="depAmount" type="number" placeholder="Сума" min="1" step="0.01">
+    <button onclick="deposit('depAmount','depMsg')">Поповнити</button>
+    <div id="depMsg" class="small"></div>
+  </div>
+
+  <h3>Матчі для ставок</h3>
+  <div id="matches"></div>
+
+  <h3>Мої ставки</h3>
+  <div id="bets"></div>
+</main>
+<script src="/main.js"></script>
+<script>
+  requireAuthOrRedirect();
+  loadProfile();
+  loadMatches('matches', true);
+  loadMyBets();
+</script>
+</body>
+</html>

@@ -6,23 +6,33 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 import authRoutes from './routes/auth.js';
 import matchRoutes from './routes/matches.js';
 import betRoutes from './routes/bets.js';
 import adminRoutes from './routes/admin.js';
+import userRoutes from './routes/user.js';
+
 dotenv.config();
+
 const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 app.use(express.static(path.join(__dirname, '..', 'public')));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/matches', matchRoutes);
 app.use('/api/bets', betRoutes);
 app.use('/api/admin', adminRoutes);
-app.get('/api/health', (req,res)=>res.json({ok:true}));
+app.use('/api/user', userRoutes);
+
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
 const port = process.env.PORT || 3000;
-app.listen(port, ()=>console.log(`Server http://localhost:${port}`));
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
